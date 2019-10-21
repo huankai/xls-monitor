@@ -1,0 +1,49 @@
+server:
+  port: 7190
+  servlet:
+    context-path: /monitor
+spring:
+  main:
+    banner-mode: 'off'
+    allow-bean-definition-overriding: true
+  application:
+    name: xls-search-ms
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.JndiDataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfiguration
+      - org.springframework.boot.autoconfigure.groovy.template.GroovyTemplateAutoConfiguration
+      - org.springframework.boot.autoconfigure.mustache.MustacheAutoConfiguration
+      - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
+      - org.springframework.boot.autoconfigure.mail.MailSenderValidatorAutoConfiguration
+  data:
+    elasticsearch:
+      cluster-name: docker-cluster
+      cluster-nodes: 192.168.1.123:9300
+  elasticsearch:
+    rest:
+      uris:
+        - 192.168.1.123:9200
+  datasource:
+    name: hikari
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.123:3307/nbw?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 12345678
+    ######################################################### hikari datasource 配置
+    hikari:
+      maximum-pool-size: 50
+      max-lifetime: 600000
+      minimum-idle: 10
+      connection-timeout: 30000
+      read-only: false
+      connection-test-query: SELECT 1
+xls:
+  websocket:
+    endpoint: "/endpointMonitor"
+    simple-brokers:
+      - "/queue"
+logging:
+  config: "classpath:log4j2.xml"
