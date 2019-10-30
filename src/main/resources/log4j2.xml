@@ -23,6 +23,5 @@
             <AppenderRef ref="myRollingFile"/>
         </Root>
         <Logger name="io.xls.monitor" additivity="true" level="DEBUG"/>
-        <Logger name="org.springframework.data.elasticsearch" additivity="true" level="DEBUG"/>
     </Loggers>
 </Configuration>

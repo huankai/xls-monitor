@@ -1,6 +1,6 @@
 package io.xls.monitor.service;
 
-import io.xls.monitor.domain.MchtInfo;
+import io.xls.monitor.domain.es.MchtInfo;
 import io.xls.monitor.vo.ProvinceMchtVo;
 
 import java.time.LocalDateTime;

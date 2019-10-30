@@ -4,7 +4,7 @@ import io.xls.commons.utils.IDGenerator;
 import io.xls.commons.utils.JsonResult;
 import io.xls.commons.utils.date.DatePattern;
 import io.xls.commons.utils.date.DateUtils;
-import io.xls.monitor.domain.MchtInfo;
+import io.xls.monitor.domain.es.MchtInfo;
 import io.xls.monitor.service.MchtInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

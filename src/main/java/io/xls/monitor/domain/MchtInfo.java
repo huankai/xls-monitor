@@ -1,12 +1,14 @@
 package io.xls.monitor.domain;
 
-import io.xls.core.data.elasticsearch.domain.AbstractUUIDPersistable;
+import io.xls.core.data.jpa.domain.AbstractUUIDPersistable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 /**
  * 商户
@@ -15,39 +17,27 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  * @date 2019-10-17 17:44
  */
 @Data
+@Entity
+@Table(name = "mcht_info")
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@Document(indexName = MchtInfo.INDEX_NAME, type = "mchtInfo")
 public class MchtInfo extends AbstractUUIDPersistable {
-
-    public static final String INDEX_NAME = "monitor-mcht";
 
     /**
      * 商户名称
      */
-    @Field(type = FieldType.Keyword)
+    @Column(name = "name")
     private String name;
 
     /**
      * 所在省
      */
-    @Field(type = FieldType.Keyword)
+    @Column(name = "province")
     private String province;
 
     /**
      * 入驻时间
      */
-    @Field(type = FieldType.Date)
-    private String crateDate;
-
-    /**
-     * <pre>
-     * 数据来源
-     *      kys:卡医生
-     *      xls:新零售
-     *      test: 测试环境
-     * </pre>
-     */
-    @Field(type = FieldType.Keyword)
-    private String source;
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
 }

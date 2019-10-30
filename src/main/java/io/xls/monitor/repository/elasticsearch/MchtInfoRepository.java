@@ -1,7 +1,7 @@
 package io.xls.monitor.repository.elasticsearch;
 
 import io.xls.core.data.elasticsearch.repository.BaseElasticsearchRepository;
-import io.xls.monitor.domain.MchtInfo;
+import io.xls.monitor.domain.es.MchtInfo;
 
 /**
  * @author kevin

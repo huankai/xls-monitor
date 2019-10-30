@@ -19,19 +19,21 @@ spring:
       - org.springframework.boot.autoconfigure.mail.MailSenderValidatorAutoConfiguration
   data:
     elasticsearch:
-      cluster-name: docker-cluster
-      cluster-nodes: 192.168.1.123:9300
+      cluster-name: monitor-cluster
+      cluster-nodes: 192.168.1.86:9300,192.168.1.87:9300,192.168.1.88:9300
   elasticsearch:
     rest:
       uris:
-        - 192.168.1.123:9200
+        - 192.168.1.86:9200
+        - 192.168.1.87:9200
+        - 192.168.1.88:9200
   datasource:
     name: hikari
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.123:3307/nbw?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://192.168.1.127:3307/monitor?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
-    password: 12345678
+    password:
     ######################################################### hikari datasource 配置
     hikari:
       maximum-pool-size: 50

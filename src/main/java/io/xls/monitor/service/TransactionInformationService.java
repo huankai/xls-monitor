@@ -1,6 +1,6 @@
 package io.xls.monitor.service;
 
-import io.xls.monitor.domain.TransactionInformation;
+import io.xls.monitor.domain.es.TransactionInformation;
 import io.xls.monitor.vo.*;
 
 import java.math.BigDecimal;
@@ -30,9 +30,9 @@ public interface TransactionInformationService {
 
     default Map<String, Object> transactionInformationStatics() {
         Map<String, Object> data = new HashMap<>(4);
-        data.put("totalTransCount", count());
+        data.put("totalTransCount", (int) count());
         data.put("totalTransAmount", sumAmount());
-        data.put("todayTransCount", todayCount());
+        data.put("todayTransCount", (int) todayCount());
         data.put("todayTransAmount", todaySumAmount());
         return data;
     }

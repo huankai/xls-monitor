@@ -6,7 +6,7 @@ import io.xls.commons.utils.JsonResult;
 import io.xls.commons.utils.date.DatePattern;
 import io.xls.commons.utils.date.DateUtils;
 import io.xls.monitor.consts.TopicName;
-import io.xls.monitor.domain.TransactionInformation;
+import io.xls.monitor.domain.es.TransactionInformation;
 import io.xls.monitor.repository.elasticsearch.TransactionInformationRepository;
 import io.xls.monitor.service.MchtInfoService;
 import io.xls.monitor.service.TransactionInformationService;

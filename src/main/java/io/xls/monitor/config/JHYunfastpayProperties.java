@@ -10,10 +10,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2019-10-21 8:59
  */
 @Data
-@ConfigurationProperties(prefix = "xls.js")
-public class JHProperties {
+@ConfigurationProperties(prefix = "xls.jh.yunfastpay")
+public class JHYunfastpayProperties {
 
-    private String baseUrl = "http://192.168.1.220:8091/quickpay-api";
+    private String baseUrl = "https://api.yunfastpay.com/quickpay-api";
+
+    private boolean enabled;
 
     private String mchtSuffix = "/mcht/query";
 
@@ -26,4 +28,5 @@ public class JHProperties {
     public String getTransListUrl() {
         return baseUrl + transSuffix;
     }
+
 }
