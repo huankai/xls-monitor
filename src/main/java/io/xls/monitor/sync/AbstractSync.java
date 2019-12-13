@@ -54,70 +54,79 @@ abstract class AbstractSync implements DataSync {
     @Override
     public final void syncMchtInfo() {
         if (isEnabled()) {
-            LocalDateTime now = LocalDateTime.now();
-            String endDate = DateUtils.localDateTimeToString(now, DatePattern.YYYYMMDD);
-            if (StringUtils.isEmpty(mchtInfoSyncStartDate)) {
-                mchtInfoSyncStartDate = DateUtils.localDateTimeToString(now.with(LocalTime.MIN), DatePattern.YYYYMMDD);
+            LocalDateTime now = LocalDateTime.of(2017, 1, 1, 0, 0, 0);
+            while (LocalDateTime.now().isAfter(now)) {
+                String endDate = DateUtils.localDateTimeToString(now, DatePattern.YYYYMMDD);
+                if (StringUtils.isEmpty(mchtInfoSyncStartDate)) {
+                    mchtInfoSyncStartDate = "20191001";
+                }
+                if (StringUtils.isEmpty(mchtInfoSyncStartTime)) {
+                    mchtInfoSyncStartTime = DateUtils.localDateTimeToString(now.with(LocalTime.MIN), DatePattern.HHMMSS);
+                }
+                String endTime = DateUtils.localDateTimeToString(now, DatePattern.HHMMSS);
+                Map<String, Object> param = new HashMap<>(4);
+                param.put("startDate", DateUtils.localDateTimeToString(now, DatePattern.YYYYMMDD));
+                param.put("endDate", DateUtils.localDateTimeToString(now.plusMonths(1), DatePattern.YYYYMMDD));
+                param.put("startTime", "000000");
+                param.put("endTime", "235959");
+                String mchtListUrl = getMchtListUrl();
+                logger.debug("loadMchtInfoList for {},param: {}",
+                        mchtListUrl,
+                        param.toString());
+                String result = HttpClientUtils.execute(HttpClientUtils.createHttpClient(RequestConfig.custom().build()), HttpUtils.newHttpGet(mchtListUrl, param));
+                MonitorApplication.JhResult<MchtInfo> mchtResult = JsonUtils.deserialize(result, MonitorApplication.JhResult.class, MchtInfo.class);
+                logger.debug("MchtInfo Result: {}", JsonUtils.serialize(mchtResult));
+                mchtResult.getData().forEach(item -> {
+                    item.setCrateDate(DateUtils.dateToString(DateUtils.stringToDate(item.getCrateDate(), DatePattern.YYYYMMDDHHMMSS)));
+                    item.setProvince(AddressUtils.getValue(item.getProvince()));
+                    item.setSource(getSource());
+                });
+                mchtInfoService.saveAll(mchtResult.getData());
+                this.mchtInfoSyncStartDate = endDate;
+                this.mchtInfoSyncStartTime = endTime;
+                now = now.plusMonths(1);
             }
-            if (StringUtils.isEmpty(mchtInfoSyncStartTime)) {
-                mchtInfoSyncStartTime = DateUtils.localDateTimeToString(now.with(LocalTime.MIN), DatePattern.HHMMSS);
-            }
-            String endTime = DateUtils.localDateTimeToString(now, DatePattern.HHMMSS);
-            Map<String, Object> param = new HashMap<>(4);
-            param.put("startDate", mchtInfoSyncStartDate);
-            param.put("endDate", endDate);
-            param.put("startTime", mchtInfoSyncStartTime);
-            param.put("endTime", endTime);
-            String mchtListUrl = getMchtListUrl();
-            logger.debug("loadMchtInfoList for {} ... : startDate:{},endDate:{}，startTime:{},endTime:{}",
-                    mchtListUrl,
-                    mchtInfoSyncStartDate, endDate, mchtInfoSyncStartTime, endTime);
-            String result = HttpClientUtils.get(mchtListUrl, param);
-            MonitorApplication.JhResult<MchtInfo> mchtResult = JsonUtils.deserialize(result, MonitorApplication.JhResult.class, MchtInfo.class);
-            logger.debug("MchtInfo Result: {}", JsonUtils.serialize(mchtResult));
-            mchtResult.getData().forEach(item -> {
-                item.setCrateDate(DateUtils.dateToString(DateUtils.stringToDate(item.getCrateDate(), DatePattern.YYYYMMDDHHMMSS)));
-                item.setProvince(AddressUtils.getValue(item.getProvince()));
-                item.setSource(getSource());
-            });
-            mchtInfoService.saveAll(mchtResult.getData());
-            this.mchtInfoSyncStartDate = endDate;
-            this.mchtInfoSyncStartTime = endTime;
         }
     }
 
     @Override
     public void syncTransactionInfo() {
         if (isEnabled()) {
-            LocalDateTime now = LocalDateTime.now();
-            String endDate = DateUtils.localDateTimeToString(now, DatePattern.YYYYMMDD);
-            if (StringUtils.isEmpty(transSyncStartDate)) {
-                transSyncStartDate = DateUtils.localDateTimeToString(now.with(LocalTime.MIN), DatePattern.YYYYMMDD);
-            }
-            if (StringUtils.isEmpty(transSyncStartTime)) {
-                transSyncStartTime = DateUtils.localDateTimeToString(now.with(LocalTime.MIN), DatePattern.HHMMSS);
-            }
-            String endTime = DateUtils.localDateTimeToString(now, DatePattern.HHMMSS);
-            Map<String, Object> param = new HashMap<>(4);
-            param.put("startDate", transSyncStartDate);
-            param.put("endDate", endDate);
-            param.put("startTime", transSyncStartTime);
-            param.put("endTime", endTime);
-            String transUrl = getTransUrl();
-            logger.debug("loadJhTrans for {},... : startDate:{},endDate:{}，startTime:{},endTime:{}",
-                    transUrl, transSyncStartDate, endDate, transSyncStartTime, endTime);
+            LocalDateTime now = LocalDateTime.of(2019, 7, 20, 0, 0, 0);
+            while (LocalDateTime.now().isAfter(now)) {
+//            LocalDateTime now = LocalDateTime.now();
+                String endDate = DateUtils.localDateTimeToString(now, DatePattern.YYYYMMDD);
+//            if (StringUtils.isEmpty(transSyncStartDate)) {
+//                transSyncStartDate = mchtInfoSyncStartDate = "20191015";
+//            }
+//            if (StringUtils.isEmpty(transSyncStartTime)) {
+//                transSyncStartTime = DateUtils.localDateTimeToString(now.with(LocalTime.MIN), DatePattern.HHMMSS);
+//            }
+                String endTime = DateUtils.localDateTimeToString(now, DatePattern.HHMMSS);
+                Map<String, Object> param = new HashMap<>(4);
+                param.put("startDate", DateUtils.localDateTimeToString(now, DatePattern.YYYYMMDD));
+                param.put("endDate", DateUtils.localDateTimeToString(now.plusDays(2), DatePattern.YYYYMMDD));
+                param.put("startTime", "000000");
+                param.put("endTime", "235959");
+                String transUrl = getTransUrl();
+                logger.debug("loadMchtInfoList for {},param: {}",
+                        transUrl,
+                        param.toString());
 //            String result = HttpClientUtils.get(transUrl, param);
-            String result = HttpClientUtils.execute(HttpClientUtils.createHttpClient(RequestConfig.custom().build()), HttpUtils.newHttpGet(transUrl, param));
-            MonitorApplication.JhResult<TransactionInformation> mchtResult = JsonUtils.deserialize(result, MonitorApplication.JhResult.class, TransactionInformation.class);
-            logger.debug("hTransResult: {}", JsonUtils.serialize(mchtResult));
-            mchtResult.getData().forEach(item -> {
-                item.setCreateDate(DateUtils.dateToString(DateUtils.stringToDate(item.getCreateDate(), DatePattern.YYYYMMDD)));
-                item.setProvince(AddressUtils.getValue(item.getProvince()));
-                item.setSource(getSource());
-            });
-            transactionInformationService.saveAll(mchtResult.getData());
-            this.transSyncStartDate = endDate;
-            this.transSyncStartTime = endTime;
+                String result = HttpClientUtils.execute(HttpClientUtils.createHttpClient(RequestConfig.custom().build()), HttpUtils.newHttpGet(transUrl, param));
+//            String result = HttpClientUtils.execute(HttpClientUtils.createHttpClient(RequestConfig.custom().build()), HttpUtils.newHttpGet(transUrl, param));
+                MonitorApplication.JhResult<TransactionInformation> mchtResult = JsonUtils.deserialize(result, MonitorApplication.JhResult.class, TransactionInformation.class);
+                logger.debug("hTransResult: {}", JsonUtils.serialize(mchtResult));
+                mchtResult.getData().forEach(item -> {
+                    item.setCreateDate(DateUtils.dateToString(DateUtils.stringToDate(item.getCreateDate(), DatePattern.YYYYMMDD)));
+                    item.setProvince(AddressUtils.getValue(item.getProvince()));
+                    item.setSource(getSource());
+                });
+                transactionInformationService.saveAll(mchtResult.getData());
+                this.transSyncStartDate = endDate;
+                this.transSyncStartTime = endTime;
+                now = now.plusDays(2);
+            }
         }
     }
 }

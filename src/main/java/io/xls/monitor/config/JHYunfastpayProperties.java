@@ -15,7 +15,7 @@ public class JHYunfastpayProperties {
 
     private String baseUrl = "https://api.yunfastpay.com/quickpay-api";
 
-    private boolean enabled;
+    private boolean enabled = true;
 
     private String mchtSuffix = "/mcht/query";
 
